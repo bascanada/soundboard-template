@@ -24,6 +24,23 @@ The scripts automate the creation of the soundboard's content.
     2.  They run the `npm run generate` command.
     3.  The scripts download the videos, cut the clips, generate thumbnails, compress the media, and create the entire required file structure within the `static` directory.
 
+#### 2.1. Implementation Details & Requirements
+
+* **Technology:** The scripts will be written in **Node.js** to maintain a consistent JavaScript/TypeScript ecosystem. They will use Node's `child_process` module to execute command-line tools.
+* **Dependencies:** The user must have **`yt-dlp`** and **`ffmpeg`** installed and available in their system's PATH. The script will check for the existence of these tools on startup and provide a clear error message with installation links if they are not found.
+* **Error Handling:**
+    * The script will wrap critical operations (video download, clip processing) in `try...catch` blocks.
+    * If a single clip fails to process (e.g., invalid timestamp), the script will log a detailed error to the console and **continue to the next clip**.
+    * A summary of any failed clips will be displayed at the end of the process.
+* **Clip ID Generation:**
+    * Clip IDs are generated automatically to ensure uniqueness.
+    * **Algorithm:**
+        1.  Take the clip's `title` (e.g., "First Clip!").
+        2.  Convert to lowercase: `"first clip!"`.
+        3.  "Slugify" it by replacing spaces with hyphens and removing special characters: `"first-clip"`.
+        4.  Append a unique, incrementing number (e.g., `-1`, `-2`) to guarantee no duplicates across the entire project.
+    * **Example:** `first-clip-1`, `another-great-clip-2`.
+
 * **Configuration File (`config.js`):**
     ```javascript
     export default {
