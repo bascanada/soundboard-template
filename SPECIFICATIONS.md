@@ -104,6 +104,12 @@ export default {
 
 ```
 
+#### 2.4. Database Generation
+
+* **Generation:** The `db.json` file is the final artifact produced by the extraction scripts when `npm run generate` is executed.
+
+* **Location:** The file is saved at `static/db.json` within the SvelteKit project structure.
+
 ### 3. Part 2: The SvelteKit Template
 
 * **Technical Stack:**
@@ -114,7 +120,7 @@ export default {
 
   * **Styling:** Tailwind CSS
 
-  * **UI Components:** Skeleton UI (**Must use v3 documentation**)
+  * **UI Components:** Skeleton UI (**Must** use v3 **documentation**)
 
 * **Styling Guidelines:**
 
@@ -122,7 +128,7 @@ export default {
 
     1. **Skeleton UI Components & Props**
 
-    2. **Tailwind CSS Utility Classes**
+    2. **Tailwind** CSS Utility **Classes**
 
     3. **Custom CSS Classes** (only as a last resort)
 
@@ -137,46 +143,68 @@ export default {
   
   ```
 
-* **Key Components & Logic:**
+* **Data Loading Strategy:**
 
-  * **`CategoryScroller.svelte`:** Allows multiple category selection.
+  * The SvelteKit application loads all its data at **build time** from the `static/db.json` file.
 
-  * `Clip.svelte` ("Story" Concept): See detailed specification below.
+  * This is achieved using a `+page.js` load function in the `src/routes` directory. Because we are using `adapter-static`, this function runs during the `npm run build` process.
+
+  * The data is imported and passed as a prop to the page component. This means there are **no client-side fetch requests** for the clip data, resulting in maximum performance.
+
+  * **Example (`src/routes/+page.js`):**
+
+    ```
+    import type { PageLoad } from './$types';
+    import db from '$lib/assets/db.json'; // Vite handles the JSON import
+    import type { Database } from '$lib/types';
+    
+    export const load: PageLoad = () => {
+      // The 'db' object is passed as the 'data' prop to the +page.svelte component
+      return db as Database; 
+    };
+    
+    ```
 
 #### 3.1. Core TypeScript Interfaces
 
 To ensure type safety throughout the SvelteKit application, the following interfaces will be defined (e.g., in a `src/lib/types.ts` file).
 
 * **`Clip`**: Represents a single soundboard clip.
-    ```typescript
-    export interface Clip {
-      id: string;
-      title: string;
-      category: string;
-      audioSrc: string;
-      videoSrc: string | null;
-      thumbnailSrc: string;
-    }
-    ```
+
+  ```
+  export interface Clip {
+    id: string;
+    title: string;
+    category: string;
+    audioSrc: string;
+    videoSrc: string | null;
+    thumbnailSrc: string;
+  }
+  
+  ```
 
 * **`Database`**: Defines the structure of the `db.json` file.
-    ```typescript
-    import type { Clip } from './types';
 
-    export interface Database {
-      categories: string[];
-      clips: Clip[];
-    }
-    ```
+  ```
+  import type { Clip } from './types';
+  
+  export interface Database {
+    categories: string[];
+    clips: Clip[];
+  }
+  
+  ```
 
 * **`SiteConfig`**: Defines the structure of the `site.config.js` file.
-    ```typescript
-    export interface SiteConfig {
-      title: string;
-      favicon: string;
-      theme: string;
-    }
-    ```
+
+  ```
+  export interface SiteConfig {
+    title: string;
+    favicon: string;
+    theme: string;
+  }
+  
+  ```
 
 #### 3.2. Component Specification: `Clip.svelte`
 
@@ -185,7 +213,9 @@ This component is the core interactive element of the soundboard.
 * **Structure (HTML/Svelte):**
 
   * A main container `<div>` with a fixed size (e.g., `100px` x `100px`) will act as the bounding box.
+
   * Inside, a `<div>` will contain the media (`<img>` for the thumbnail or `<video>`). This div will be circular and slightly smaller than the container to create a margin.
+
   * An `<svg>` element will be positioned absolutely on top of everything, with the same dimensions as the container, to draw the border and progress animation.
 
 * **States:** The component will manage several states: `idle`, `playing`, `paused`, `viewed`.
@@ -193,35 +223,54 @@ This component is the core interactive element of the soundboard.
 * **Visuals & Styling (SVG Approach):**
 
   * The SVG will contain two `<circle>` elements and a `<defs>` section for the gradient.
+
   * **Gradient Definition:** A `<linearGradient>` will be defined in `<defs>` with an ID (e.g., `story-gradient`). It will use the primary and secondary colors from the selected Skeleton theme.
+
   * **Background Circle:** A full circle with a muted grey stroke (e.g., `surface-400`). This is the "track" for the progress bar.
+
   * **Progress Circle:** A second circle placed on top.
+
     * **Idle State:** Its `stroke` will be set to `url(#story-gradient)`. The `stroke-dasharray` and `stroke-dashoffset` will be set to `0` so the full gradient border is visible.
+
     * **Viewed State:** The `stroke` will be changed to the same muted grey as the background, making it appear as a single grey ring.
 
 * **Behavior & Animation:**
 
   * **On First Click:**
+
     * The component's state changes to `playing`.
+
     * If a video exists, it replaces the thumbnail and starts playing.
+
     * The corresponding `.mp3` audio starts playing.
+
     * The progress animation begins.
+
   * **Progress Bar Animation (SVG `stroke-dashoffset`):**
+
     * The animation will be driven by a Svelte reactive statement or `requestAnimationFrame`.
+
     * The script will calculate the circle's circumference (`C = 2 * π * r`).
+
     * The `stroke-dasharray` of the progress circle will be set to `C`.
+
     * On each frame, the script will get the audio's `currentTime` and `duration` to calculate a progress percentage (`P`).
+
     * The `stroke-dashoffset` will be dynamically updated using the formula: `offset = C * (1 - P)`. This will "undraw" the dash, revealing the grey track underneath and creating the progress effect.
+
   * **On Clip End:** The audio `ended` event transitions the component's state to `viewed`, and the SVG progress circle's stroke is set to the final grey color.
 
 #### 3.3. Interaction Logic & Edge Cases
 
 * **Category Filtering Logic:**
+
   * When multiple categories are selected, the filter uses **OR logic**.
+
   * A clip will be displayed if its category matches **any** of the selected categories.
+
   * If no categories are selected, all clips are displayed.
 
-* **Playback Model (Single Clip Focus):** To prevent auditory chaos and create a predictable experience, **only one clip can be playing at a time.**
+* **Playback** Model **(Single Clip Focus):** To prevent auditory chaos and create a predictable experience, **only one clip can be playing at a time.**
 
   * When a user clicks a new clip, any currently `playing` or `paused` clip is immediately stopped and reset to its `idle` (or `viewed`) state.
 
@@ -244,4 +293,91 @@ This component is the core interactive element of the soundboard.
   * Playback is **never** initiated automatically on page load.
 
   * The `.play()` method for any audio or video element is **only** called as a direct result of a user `click` or `tap` event on a `Clip.svelte` component. This satisfies the user gesture requirement.
+
+### 4. Deployment
+
+#### 4.1. GitHub Pages
+
+Deployment to GitHub Pages requires a specific configuration to handle the repository's sub-path.
+
+1.  **Install `adapter-static`:**
+    ```bash
+    npm i -D @sveltejs/adapter-static@next
+    ```
+
+2.  **Configure SvelteKit:** In `svelte.config.js`, import and set the adapter.
+    ```javascript
+    import adapter from '@sveltejs/adapter-static';
+
+    const config = {
+      // ...
+      kit: {
+        adapter: adapter({
+          pages: 'build',
+          assets: 'build',
+          fallback: null,
+          precompress: false
+        })
+      }
+    };
+    ```
+
+3.  **Set the Base Path:** In `vite.config.js`, set the `base` path to your repository name.
+    ```javascript
+    // vite.config.js
+    import { sveltekit } from '@sveltejs/kit/vite';
+
+    const config = {
+      plugins: [sveltekit()],
+      base: '/YOUR_REPO_NAME/' // <-- Add this line
+    };
+
+    export default config;
+    ```
+
+4.  **Create GitHub Actions Workflow:** Create a file at `.github/workflows/deploy.yml`.
+    ```yaml
+    name: Deploy to GitHub Pages
+
+    on:
+      push:
+        branches:
+          - main
+
+    jobs:
+      build-and-deploy:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v3
+
+          - name: Setup Node.js
+            uses: actions/setup-node@v3
+            with:
+              node-version: '18'
+
+          - name: Install dependencies
+            run: npm install
+
+          - name: Build
+            run: npm run build
+
+          - name: Deploy
+            uses: peaceiris/actions-gh-pages@v3
+            with:
+              github_token: ${{ secrets.GITHUB_TOKEN }}
+              publish_dir: ./build
+    ```
+
+5.  **Configure Repository Settings:** In your GitHub repo settings, under "Pages," set the source to "Deploy from a branch" and select the `gh-pages` branch.
+
+#### 4.2. Vercel
+
+Vercel deployment is significantly simpler as it handles most configuration automatically.
+
+1.  **Import Project:** Sign up for Vercel and import your Git repository.
+2.  **Configure Project:** Vercel will automatically detect that it's a SvelteKit project. The default settings should work correctly.
+    * **Build Command:** `npm run build`
+    * **Output Directory:** `build` (if using `adapter-static`) or `.vercel/output` (if using `adapter-auto`).
+3.  **Deploy:** Click "Deploy". Vercel will build and deploy your site, and it will automatically redeploy on every push to the `main` branch.
 
