@@ -1,6 +1,2 @@
-/** @type {import('./types').SiteConfig} */
-export default {
-    title: "My Awesome Soundboard",
-    favicon: "/favicon.png",
-    theme: "cerberus"
-};
+import siteConfig from '../../config/site.js';
+export default siteConfig;

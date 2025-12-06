@@ -22,27 +22,37 @@ npm install
 
 ### 2. Configuration
 
-Edit `config.js` to define your clips:
+All configuration files are located in the `config/` directory.
+
+#### Clips Configuration (`config/clips.js`)
+Define your video sources and clips here.
 
 ```javascript
-export default {
-  sources: [
-    {
-      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      clips: [
-        { title: "Chorus", category: "Music", start: "0:42", end: "1:15" }
-      ]
-    }
-  ]
-};
+export default [
+  {
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    clips: [
+      {
+        id: "the-chorus-1",
+        title: "The chorus",
+        start: "00:43",
+        end: "00:53",
+        category: "Music"
+      }
+    ]
+  }
+];
 ```
 
-Edit `src/lib/site.config.js` for site metadata:
+#### Site Configuration (`config/site.js`)
+Customize your site's metadata, theme, and PWA settings.
 
 ```javascript
 export default {
   title: "My Soundboard",
-  theme: "cerberus"
+  description: "Best clips ever",
+  theme: "cerberus", // Skeleton UI theme
+  // ...
 };
 ```
 
@@ -55,9 +65,9 @@ npm run generate
 
 This script will:
 1.  Check for `yt-dlp` and `ffmpeg`.
-2.  Download videos defined in `config.js` to `.cache/downloads`.
+2.  Download videos defined in `config/clips.js` to `.cache/downloads`.
 3.  Extract audio/video clips and thumbnails to `static/media`.
-4.  Generate `static/db.json`.
+4.  Generate `static/db.json` and `static/manifest.json`.
 
 **Caching:**
 - Downloaded videos are cached in `.cache/downloads`.

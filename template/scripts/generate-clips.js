@@ -10,7 +10,7 @@ import { CacheManager } from './cache-manager.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
-const CONFIG_PATH = path.join(ROOT_DIR, 'config.js');
+const CONFIG_PATH = path.join(ROOT_DIR, 'config/clips.js');
 const STATIC_DIR = path.join(ROOT_DIR, 'static');
 const MEDIA_DIR = path.join(STATIC_DIR, 'media');
 const CACHE_DIR = path.join(ROOT_DIR, '.cache');
@@ -99,6 +99,37 @@ async function main() {
 
         // 7. Generate Database
         generateDatabase(processedClips, STATIC_DIR);
+
+        // 8. Generate Manifest
+        console.log('📄 Generating manifest.json...');
+        // We need to import siteConfig. Since it's an ES module in src, we can import it directly if we use the right path.
+        // However, src/lib/site.config.js might import types which node doesn't like if not compiled.
+        // But our site.config.js is pure JS.
+        const siteConfigPath = path.join(ROOT_DIR, 'config/site.js');
+        const siteConfig = (await import(siteConfigPath)).default;
+
+        const manifest = {
+            name: siteConfig.pwa.name,
+            short_name: siteConfig.pwa.short_name,
+            start_url: siteConfig.pwa.start_url,
+            display: siteConfig.pwa.display,
+            background_color: siteConfig.pwa.background_color,
+            theme_color: siteConfig.pwa.theme_color,
+            icons: [
+                {
+                    src: siteConfig.favicon,
+                    sizes: "192x192",
+                    type: "image/png"
+                },
+                {
+                    src: siteConfig.favicon,
+                    sizes: "512x512",
+                    type: "image/png"
+                }
+            ]
+        };
+
+        fs.writeFileSync(path.join(STATIC_DIR, 'manifest.json'), JSON.stringify(manifest, null, 2));
 
         console.log('\n✨ Generation Complete!');
         console.log(`   ✅ Processed: ${successCount}`);

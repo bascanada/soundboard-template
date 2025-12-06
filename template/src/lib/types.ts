@@ -16,6 +16,17 @@ export interface Database {
 
 export interface SiteConfig {
 	title: string;
+	description: string;
+	keywords: string[];
 	favicon: string;
 	theme: string;
+	author: string;
+	pwa: {
+		name: string;
+		short_name: string;
+		start_url: string;
+		display: 'standalone' | 'fullscreen' | 'minimal-ui' | 'browser';
+		background_color: string;
+		theme_color: string;
+	};
 }
