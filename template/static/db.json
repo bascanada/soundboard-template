@@ -1,0 +1,24 @@
+{
+  "categories": [
+    "Dance",
+    "Music"
+  ],
+  "clips": [
+    {
+      "id": "the-chorus-1",
+      "title": "The chorus",
+      "category": "Music",
+      "audioSrc": "/media/the-chorus-1/audio.mp3",
+      "thumbnailSrc": "/media/the-chorus-1/thumbnail.jpg",
+      "videoSrc": null
+    },
+    {
+      "id": "the-dance-1",
+      "title": "The dance",
+      "category": "Dance",
+      "audioSrc": "/media/the-dance-1/audio.mp3",
+      "thumbnailSrc": "/media/the-dance-1/thumbnail.jpg",
+      "videoSrc": "/media/the-dance-1/video.webm"
+    }
+  ]
+}
