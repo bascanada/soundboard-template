@@ -2,6 +2,8 @@
 	import { onMount } from 'svelte';
 	import type { Clip } from '$lib/types';
 
+	import { audioState } from '$lib/state/audio.svelte.js';
+
 	let { clip, currentPlayingId = $bindable(null) } = $props();
 
 	let audio = $state<HTMLAudioElement>();
@@ -44,9 +46,11 @@
 			}
 			isPlaying = true;
 			isViewed = true;
+			audioState.isPlaying = true;
 		} catch (e) {
 			console.error('Playback failed', e);
 			isPlaying = false;
+			audioState.isPlaying = false;
 		}
 	}
 
@@ -62,6 +66,10 @@
 		}
 		isPlaying = false;
 		progress = 0;
+		// Only set global state to false if we are the one playing
+		if (currentPlayingId === clip.id) {
+			audioState.isPlaying = false;
+		}
 	}
 
 	function handleTimeUpdate(e: Event) {
@@ -74,6 +82,7 @@
 		isPlaying = false;
 		progress = 0;
 		currentPlayingId = null;
+		audioState.isPlaying = false;
 		if (video) {
 			video.currentTime = 0;
 		}
@@ -97,7 +106,7 @@
 		<video
 			bind:this={video}
 			src={clip.videoSrc}
-			class="absolute left-0 top-0 h-full w-full rounded-full object-cover"
+			class="absolute top-0 left-0 h-full w-full rounded-full object-cover"
 			playsinline
 			ontimeupdate={handleTimeUpdate}
 			onended={handleEnded}
@@ -114,12 +123,12 @@
 		<img
 			src={clip.thumbnailSrc}
 			alt={clip.title}
-			class="absolute left-0 top-0 h-full w-full rounded-full object-cover"
+			class="absolute top-0 left-0 h-full w-full rounded-full object-cover"
 		/>
 	{/if}
 
 	<!-- SVG Overlay -->
-	<svg width={size} height={size} class="pointer-events-none absolute left-0 top-0 rotate-[-90deg]">
+	<svg width={size} height={size} class="pointer-events-none absolute top-0 left-0 rotate-[-90deg]">
 		<!-- Defs for Gradient -->
 		<defs>
 			<linearGradient id="gradient-{clip.id}" x1="0%" y1="0%" x2="100%" y2="0%">

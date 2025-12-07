@@ -1,14 +1,14 @@
 /** @type {import('../src/lib/types').SiteConfig} */
 export default {
-    title: "My Awesome Soundboard",
-    description: "A collection of my favorite sound clips.",
+    title: "Kesse Qui Dit ?",
+    description: "Boite à son avec les incontournables du québec",
     keywords: ["soundboard", "clips", "funny"],
     favicon: "/favicon.png",
-    theme: "cerberus",
-    author: "Soundboard User",
+    theme: "wintry",
+    author: "Bascanada",
     pwa: {
-        name: "My Awesome Soundboard",
-        short_name: "Soundboard",
+        name: "Kesse Qui Dit ?",
+        short_name: "KQD",
         start_url: "/",
         display: "standalone",
         background_color: "#ffffff",

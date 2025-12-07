@@ -6,3 +6,7 @@
 /* Theme imported dynamically in +layout.svelte */
 
 @source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
+
+@utility animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
