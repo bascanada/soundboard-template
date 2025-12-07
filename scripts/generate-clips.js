@@ -61,7 +61,8 @@ async function main() {
                             category: clip.category,
                             audioSrc: `/media/${clip.id}/audio.mp3`,
                             thumbnailSrc: `/media/${clip.id}/thumbnail.jpg`,
-                            videoSrc: clip.video ? `/media/${clip.id}/video.webm` : null
+                            videoSrc: clip.video ? `/media/${clip.id}/video.webm` : null,
+                            scale: clip.scale
                         });
                         skippedCount++;
                         continue;

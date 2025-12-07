@@ -10,7 +10,9 @@
 	let filteredClips = $derived(
 		selectedCategories.length === 0
 			? data.db.clips
-			: data.db.clips.filter((clip: import('$lib/types').Clip) => selectedCategories.includes(clip.category))
+			: data.db.clips.filter((clip: import('$lib/types').Clip) =>
+					selectedCategories.includes(clip.category)
+				)
 	);
 </script>
 
@@ -18,27 +20,22 @@
 	<title>{siteConfig.title}</title>
 </svelte:head>
 
-<div class="container mx-auto p-4 space-y-8">
-	<!-- Header -->
-	<header class="text-center space-y-4">
-		<h1 class="h1">{siteConfig.title}</h1>
-	</header>
-
+<div class="container mx-auto space-y-8 p-4">
 	<!-- Filter -->
 	<div class="flex justify-center">
 		<CategoryFilter categories={data.db.categories} bind:selectedCategories />
 	</div>
 
 	<!-- Grid -->
-	<div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-6 justify-items-center">
+	<div class="flex flex-wrap justify-center gap-6">
 		{#each filteredClips as clip (clip.id)}
 			<div class="flex flex-col items-center">
 				<Clip {clip} bind:currentPlayingId />
 			</div>
 		{/each}
 	</div>
-	
+
 	{#if filteredClips.length === 0}
-		<div class="text-center opacity-50">No clips found for selected categories.</div>
+		<div class="text-center opacity-50">Aucun clip trouvé pour les catégories sélectionnées.</div>
 	{/if}
 </div>

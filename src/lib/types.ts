@@ -7,6 +7,7 @@ export interface Clip {
 	thumbnailSrc: string;
 	start?: string; // Original start time string (e.g. "0:42")
 	end?: string;   // Original end time string
+	scale?: number; // Optional zoom scale (e.g. 1.5)
 }
 
 export interface Database {

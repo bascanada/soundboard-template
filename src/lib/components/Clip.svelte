@@ -3,6 +3,7 @@
 	import type { Clip } from '$lib/types';
 
 	import { audioState } from '$lib/state/audio.svelte.js';
+	import { settingsState } from '$lib/state/settings.svelte.js';
 
 	let { clip, currentPlayingId = $bindable(null) } = $props();
 
@@ -13,11 +14,18 @@
 	let progress = $state(0); // 0 to 1
 	let duration = $state(0);
 
-	// SVG Config
-	const size = 100;
+	// SVG Config - Reactive based on settings
+	const baseSize = 100;
+	let size = $derived(baseSize * settingsState.podSize);
 	const strokeWidth = 4;
-	const radius = (size - strokeWidth) / 2;
-	const circumference = 2 * Math.PI * radius;
+	let radius = $derived((size - strokeWidth) / 2);
+	let circumference = $derived(2 * Math.PI * radius);
+
+	// Update volume when it changes
+	$effect(() => {
+		if (audio) audio.volume = settingsState.volume;
+		if (video) video.volume = settingsState.volume;
+	});
 
 	// Reactive state for playback
 	$effect(() => {
@@ -40,8 +48,10 @@
 
 		try {
 			if (clip.videoSrc && video) {
+				video.volume = settingsState.volume;
 				await video.play();
 			} else if (audio) {
+				audio.volume = settingsState.volume;
 				await audio.play();
 			}
 			isPlaying = true;
@@ -95,7 +105,9 @@
 </script>
 
 <div
-	class="relative h-[100px] w-[100px] cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95"
+	class="relative cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95"
+	style:width="{size}px"
+	style:height="{size}px"
 	onclick={togglePlay}
 	role="button"
 	tabindex="0"
@@ -107,6 +119,7 @@
 			bind:this={video}
 			src={clip.videoSrc}
 			class="absolute top-0 left-0 h-full w-full rounded-full object-cover"
+			style="transform: scale({clip.scale || 1})"
 			playsinline
 			ontimeupdate={handleTimeUpdate}
 			onended={handleEnded}

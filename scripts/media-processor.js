@@ -15,7 +15,8 @@ export function processClip(clip, inputVideoPath, outputBaseDir) {
         category: clip.category,
         audioSrc: `/media/${clip.id}/audio.mp3`,
         thumbnailSrc: `/media/${clip.id}/thumbnail.jpg`,
-        videoSrc: null
+        videoSrc: null,
+        scale: clip.scale
     };
 
     try {

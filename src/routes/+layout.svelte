@@ -3,6 +3,8 @@
 	import siteConfig from '$lib/site.config';
 
 	import { audioState } from '$lib/state/audio.svelte.js';
+	import { settingsState } from '$lib/state/settings.svelte.js';
+	import Settings from '$lib/components/Settings.svelte';
 
 	// Dynamic theme import
 	// We use a glob import to ensure Vite can analyze the files
@@ -14,6 +16,10 @@
 	}
 
 	let { children } = $props();
+
+	function toggleSettings() {
+		settingsState.isOpen = !settingsState.isOpen;
+	}
 </script>
 
 <svelte:head>
@@ -31,8 +37,28 @@
 	<link rel="icon" href={siteConfig.favicon} />
 </svelte:head>
 
+<!-- Drawer Overlay -->
+{#if settingsState.isOpen}
+	<div
+		class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm transition-opacity"
+		onclick={toggleSettings}
+		role="button"
+		tabindex="0"
+		onkeydown={(e) => e.key === 'Escape' && toggleSettings()}
+	></div>
+	<!-- Drawer Panel -->
+	<div
+		class="bg-surface-50-900-token fixed top-0 right-0 z-50 h-full w-80 translate-x-0 transform p-4 shadow-xl transition-transform duration-300"
+	>
+		<div class="mb-4 flex justify-end">
+			<button class="btn-icon btn-icon-sm" onclick={toggleSettings}> ✕ </button>
+		</div>
+		<Settings />
+	</div>
+{/if}
+
 <div
-	class="bg-surface-50-900-token relative min-h-screen overflow-hidden transition-colors duration-500"
+	class="bg-surface-50-900-token relative flex min-h-screen flex-col overflow-hidden transition-colors duration-500"
 >
 	<!-- Background Gradients -->
 	<div
@@ -56,7 +82,17 @@
 		></div>
 	</div>
 
-	<div class="relative z-10">
+	<!-- AppBar -->
+	<header
+		class="sticky top-0 z-40 flex items-center justify-between bg-surface-50/50 p-4 backdrop-blur-md dark:bg-surface-900/50"
+	>
+		<h1 class="h3 font-bold">{siteConfig.title}</h1>
+		<button class="variant-ghost-surface btn btn-sm" onclick={toggleSettings}>
+			⚙️ Paramètres
+		</button>
+	</header>
+
+	<div class="relative z-10 flex-1">
 		{@render children?.()}
 	</div>
 </div>
