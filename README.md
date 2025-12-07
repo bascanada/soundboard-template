@@ -1,94 +1,91 @@
-# SounboardTemplate 🎶
+# Soundboard Template 🎶
 
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/YOUR_USERNAME/YOUR_REPO/deploy.yml?branch=main&style=for-the-badge)](https://github.com/YOUR_USERNAME/YOUR_REPO/actions)
 
-**SounboardTemplate** is an open-source starter kit to create and deploy modern, blazing-fast soundboard websites, extracted directly from YouTube videos (or other sources).
+**SoundboardTemplate** is an open-source starter kit to create and deploy modern, blazing-fast soundboard websites, extracted directly from YouTube videos.
 
-The goal is to make creating a themed soundboard (about a politician, an influencer, a meme, etc.) as simple as filling out a configuration file.
+## ✨ Features
 
-➡️ **[See Live Demo](https://YOUR_USERNAME.github.io/YOUR_REPO/)** ⬅️
+* **100% Static:** No backend, no database.
+* **Automated Extraction:** Scripts to download and process clips from YouTube.
+* **Modern UI:** SvelteKit + Skeleton UI + Tailwind CSS.
+* **Responsive:** Works on mobile and desktop.
 
----
+## 🚀 Getting Started
 
-### ✨ Features
+### 1. Installation
 
-* **100% Static:** No backend, no database. Just pure HTML/CSS/JS files for maximum performance and free hosting.
-* **Automated Extraction Scripts:** Provide YouTube links and timestamps, and let the scripts download, cut, and compress all your clips.
-* **Modern "Story" UI:** Clips are presented as interactive bubbles, inspired by Instagram stories, with the video playing inside and a circular progress bar.
-* **Easy Customization:** Change the title, color theme, and favicon by editing a single configuration file.
-* **Continuous Deployment:** A GitHub Actions pipeline is pre-configured to deploy your site to GitHub Pages on every update.
+```bash
+cd template
+npm install
+```
 
----
+### 2. Configuration
 
-### 🚀 How to Create Your Own Soundboard
+All configuration files are located in the `config/` directory.
 
-#### Step 1: Use this template
-
-Click the green **"Use this template"** button at the top of the GitHub page to create your own copy of the repository.
-
-#### Step 2: Configure your clips
-
-Open the `config.js` file at the root of the project. This is where you list the source videos and the clips you want to extract.
+#### Clips Configuration (`config/clips.js`)
+Define your video sources and clips here.
 
 ```javascript
-// config.js
+export default [
+  {
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    clips: [
+      {
+        id: "the-chorus-1",
+        title: "The chorus",
+        start: "00:43",
+        end: "00:53",
+        category: "Music"
+      }
+    ]
+  }
+];
+```
+
+#### Site Configuration (`config/site.js`)
+Customize your site's metadata, theme, and PWA settings.
+
+```javascript
 export default {
-  sources: [
-    {
-      videoUrl: "[https://www.youtube.com/watch?v=dQw4w9WgXcQ](https://www.youtube.com/watch?v=dQw4w9WgXcQ)",
-      clips: [
-        { title: "The chorus", category: "Music", start: "0:42", end: "1:15" },
-        { title: "The dance", category: "Dance", start: "1:52", end: "1:58", video: true },
-      ]
-    },
-  ]
+  title: "My Soundboard",
+  description: "Best clips ever",
+  theme: "cerberus", // Skeleton UI theme
+  // ...
 };
 ```
 
-#### Step 3: Generate the media
-
-Once your configuration is ready, run the following command. The scripts will download and prepare all your files.
+### 3. Generate Clips
+Run the generation script to download videos and create clips:
 
 ```bash
-npm install
 npm run generate
 ```
 
-#### Step 4: Customize the site's appearance
+This script will:
+1.  Check for `yt-dlp` and `ffmpeg`.
+2.  Download videos defined in `config/clips.js` to `.cache/downloads`.
+3.  Extract audio/video clips and thumbnails to `static/media`.
+4.  Generate `static/db.json` and `static/manifest.json`.
 
-Open `src/lib/site.config.js` to change the title, color theme (from the [Skeleton UI themes](https://www.skeleton.dev/docs/themes)), and favicon.
+**Caching:**
+- Downloaded videos are cached in `.cache/downloads`.
+- Clips are only re-processed if their configuration (start/end time) changes.
+- Orphaned clips (removed from config) are automatically deleted.
 
-```javascript
-// src/lib/site.config.js
-export default {
-  title: "Rick Astley's Soundboard",
-  favicon: "/favicon.png",
-  theme: "vintage"
-};
-```
-
-#### Step 5: Run the site locally
-
-To see the result live while you develop:
+### 4. Development
 
 ```bash
 npm run dev
 ```
 
----
+### 5. Deployment
 
-### 📁 Repository Structure
+#### GitHub Pages
+The included `.github/workflows/deploy.yml` will automatically deploy to GitHub Pages on push to `main`.
+Ensure you have enabled GitHub Pages in your repository settings (Source: GitHub Actions).
 
-* `/template`: The base SvelteKit project, ready to be copied. **This is where you should work.**
-* `/example`: A complete example site that uses the template. This folder is used for the demo deployed on GitHub Pages.
-
----
-
-### 🤝 Contributing
-
-This project is open-source and contributions are welcome! Feel free to open an issue to report a bug or suggest a new feature.
-
-### 📄 License
-
-This project is licensed under the **MIT License**.
-
+#### Vercel
+Import the project into Vercel. It should auto-detect SvelteKit.
+Override the build command if necessary: `cd template && npm install && npm run generate && npm run build`.

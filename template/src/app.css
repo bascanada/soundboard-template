@@ -1,8 +1,0 @@
-@import 'tailwindcss';
-@plugin '@tailwindcss/typography';
-
-@import '@skeletonlabs/skeleton';
-@import '@skeletonlabs/skeleton/optional/presets';
-/* Theme imported dynamically in +layout.svelte */
-
-@source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
