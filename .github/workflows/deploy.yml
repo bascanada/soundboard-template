@@ -38,8 +38,19 @@ jobs:
           sudo curl -L https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp -o /usr/local/bin/yt-dlp
           sudo chmod a+rx /usr/local/bin/yt-dlp
 
+      - name: Decrypt Cookies
+        run: |
+          # Decrypt the file using the secret password
+          gpg --quiet --batch --yes --decrypt --passphrase="$COOKIES_PASSWORD" --output cookies.txt config/cookies.txt.gpg
+        env:
+          COOKIES_PASSWORD: ${{ secrets.COOKIES_PASSWORD }}
+
       - name: Generate Media
         run: npm run generate
+
+      - name: Cleanup Cookies # Optional but good practice
+        if: always()
+        run: rm -f cookies.txt
 
       - name: Build
         run: npm run build

@@ -27,12 +27,20 @@ export function downloadVideo(url, cacheDir) {
 
     const outputTemplate = path.join(cacheDir, `${videoId}.%(ext)s`);
 
+    // Check for cookies file in root directory
+    let cookieArg = '';
+    const cookiePath = path.resolve('cookies.txt');
+    if (fs.existsSync(cookiePath)) {
+        console.log('TZ🍪 Using provided cookies for authentication.');
+        cookieArg = `--cookies "${cookiePath}"`;
+    }
+
     console.log(`⬇️  Downloading: ${url}`);
 
     try {
         // Download best video+audio, merge into mp4 or webm
         // --no-playlist to ensure we only get one video if it's a playlist URL
-        execSync(`yt-dlp -f "bestvideo+bestaudio/best" --merge-output-format mp4 --no-playlist -o "${outputTemplate}" "${url}"`, { stdio: 'inherit' });
+        execSync(`yt-dlp ${cookieArg} -f "bestvideo+bestaudio/best" --merge-output-format mp4 --no-playlist -o "${outputTemplate}" "${url}"`, { stdio: 'inherit' });
 
         // Find the downloaded file
         const newFiles = fs.readdirSync(cacheDir);
