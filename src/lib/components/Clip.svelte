@@ -102,15 +102,22 @@
 	// progress 0 -> offset = circumference
 	// progress 1 -> offset = 0
 	let strokeDashoffset = $derived(circumference - progress * circumference);
+
+	// Optional: Hover optimization
+	function handleHover() {
+		if (audio) audio.preload = 'metadata';
+		if (video) video.preload = 'metadata';
+	}
 </script>
 
 <div
-	class="relative cursor-pointer transition-transform duration-200 hover:scale-105 active:scale-95"
+	class="relative cursor-pointer overflow-hidden rounded-full transition-transform duration-200 hover:scale-105 active:scale-95"
 	style:width="{size}px"
 	style:height="{size}px"
 	onclick={togglePlay}
 	role="button"
 	tabindex="0"
+	onmouseenter={handleHover}
 	onkeydown={(e) => e.key === 'Enter' && togglePlay()}
 >
 	<!-- Media Elements (Hidden or Visible) -->
@@ -120,6 +127,8 @@
 			src={clip.videoSrc}
 			class="absolute top-0 left-0 h-full w-full rounded-full object-cover"
 			style="transform: scale({clip.scale || 1})"
+			preload="none"
+			poster={clip.thumbnailSrc}
 			playsinline
 			ontimeupdate={handleTimeUpdate}
 			onended={handleEnded}
@@ -130,12 +139,14 @@
 		<audio
 			bind:this={audio}
 			src={clip.audioSrc}
+			preload="none"
 			ontimeupdate={handleTimeUpdate}
 			onended={handleEnded}
 		></audio>
 		<img
 			src={clip.thumbnailSrc}
 			alt={clip.title}
+			loading="lazy"
 			class="absolute top-0 left-0 h-full w-full rounded-full object-cover"
 		/>
 	{/if}
