@@ -27,7 +27,6 @@ export default {
 
 
                 { title: "Bitch assis", category: "New Generation", start: "11:53.5", end: "11:54.3", video: true, scale: 1.25 },
-                { title: "Bitch assis 2", category: "New Generation", start: "11:53.5", end: "11:54.3", video: true, scale: 1.25 },
 
 
             ]
