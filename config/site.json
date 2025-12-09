@@ -1,20 +1,20 @@
 {
-    "title": "Kesse Qui Dit ?",
-    "description": "Boite à son avec les incontournables du québec",
-    "keywords": [
-        "soundboard",
-        "clips",
-        "funny"
-    ],
-    "favicon": "/favicon.png",
-    "theme": "wintry",
-    "author": "Bascanada",
-    "pwa": {
-        "name": "Kesse Qui Dit ?",
-        "short_name": "KQD",
-        "start_url": "/",
-        "display": "standalone",
-        "background_color": "#ffffff",
-        "theme_color": "#ffffff"
-    }
+  "title": "Kesse Qui Dit ?",
+  "description": "Boite à son avec les incontournables du québec",
+  "keywords": [
+    "soundboard",
+    "clips",
+    "funny"
+  ],
+  "favicon": "/media/favicon.png",
+  "theme": "wintry",
+  "author": "Bascanada",
+  "pwa": {
+    "name": "Kesse Qui Dit ?",
+    "short_name": "KQD",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ebe7e7"
+  }
 }
