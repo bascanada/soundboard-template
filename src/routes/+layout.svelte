@@ -6,14 +6,55 @@
 	import { settingsState } from '$lib/state/settings.svelte.js';
 	import Settings from '$lib/components/Settings.svelte';
 
-	// Dynamic theme import
+	// Dynamic theme loading
 	// We use a glob import to ensure Vite can analyze the files
 	const themes = import.meta.glob('/node_modules/@skeletonlabs/skeleton/dist/themes/*.css');
-	const themePath = `/node_modules/@skeletonlabs/skeleton/dist/themes/${siteConfig.theme}.css`;
 
-	if (themes[themePath]) {
-		themes[themePath]();
-	}
+	// Load settings from localStorage on mount
+	$effect(() => {
+		const savedSettings = localStorage.getItem('soundboard-settings');
+		if (savedSettings) {
+			const parsed = JSON.parse(savedSettings);
+			// Apply saved settings to state
+			if (parsed.theme) settingsState.theme = parsed.theme;
+			if (parsed.volume !== undefined) settingsState.volume = parsed.volume;
+			if (parsed.podSize !== undefined) settingsState.podSize = parsed.podSize;
+			if (parsed.darkMode !== undefined) settingsState.darkMode = parsed.darkMode;
+		} else {
+			// Fallback to site default if no storage
+			settingsState.theme = siteConfig.theme;
+		}
+	});
+
+	// Reactive effect to load theme CSS when state changes
+	$effect(() => {
+		const themePath = `/node_modules/@skeletonlabs/skeleton/dist/themes/${settingsState.theme}.css`;
+		if (themes[themePath]) {
+			themes[themePath]().then(() => {
+				// Theme loaded
+			});
+		}
+	});
+
+	// Reactive effect for Dark Mode
+	$effect(() => {
+		if (settingsState.darkMode) {
+			document.body.classList.add('dark');
+		} else {
+			document.body.classList.remove('dark');
+		}
+	});
+
+	// Save to localStorage when state changes
+	$effect(() => {
+		const toSave = {
+			theme: settingsState.theme,
+			volume: settingsState.volume,
+			podSize: settingsState.podSize,
+			darkMode: settingsState.darkMode
+		};
+		localStorage.setItem('soundboard-settings', JSON.stringify(toSave));
+	});
 
 	// Import build metadata
 	import buildMetadata from '$lib/build.json';
