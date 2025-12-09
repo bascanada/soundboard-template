@@ -1,0 +1,31 @@
+backend:
+  name: github
+  repo: bascanada/soundboard-template # User's repo
+  branch: main
+
+media_folder: "static/media"
+public_folder: "/media"
+
+collections:
+  - name: "config"
+    label: "Configuration"
+    files:
+      - name: "clips"
+        label: "Clips Database"
+        file: "config/clips.json"
+        fields:
+          - label: "Video Sources"
+            name: "sources"
+            widget: "list"
+            fields:
+              - {label: "YouTube URL", name: "videoUrl", widget: "string"}
+              - label: "Clips"
+                name: "clips"
+                widget: "list"
+                fields:
+                  - {label: "Title", name: "title", widget: "string"}
+                  - {label: "Category", name: "category", widget: "string"}
+                  - {label: "Start Time", name: "start", widget: "string", hint: "Format: 00:00"}
+                  - {label: "End Time", name: "end", widget: "string", hint: "Format: 00:00"}
+                  - {label: "Includes Video?", name: "video", widget: "boolean", default: true, required: false}
+                  - {label: "Zoom Scale", name: "scale", widget: "number", default: 1.0, value_type: "float", required: false, hint: "1.0 = No Zoom, 1.25 = 125%"}

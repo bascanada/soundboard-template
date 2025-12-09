@@ -5,11 +5,10 @@ import { generateSlug } from './utils/slug-generator.js';
 
 export async function parseConfig(configPath) {
     try {
-        // Import the config file dynamically
-        // We use pathToFileURL to ensure it works on Windows and with ESM
-        const configUrl = pathToFileURL(path.resolve(configPath)).href;
-        const configModule = await import(configUrl);
-        const config = configModule.default;
+        // Read the config file synchronously
+        // JSON parsing is safer and easier for external tools
+        const fileContent = fs.readFileSync(path.resolve(configPath), 'utf-8');
+        const config = JSON.parse(fileContent);
 
         if (!config || !config.sources || !Array.isArray(config.sources)) {
             throw new Error('Invalid configuration: "sources" array is missing.');

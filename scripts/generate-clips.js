@@ -10,7 +10,7 @@ import { CacheManager } from './cache-manager.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
-const CONFIG_PATH = path.join(ROOT_DIR, 'config/clips.js');
+const CONFIG_PATH = path.join(ROOT_DIR, 'config/clips.json');
 const STATIC_DIR = path.join(ROOT_DIR, 'static');
 const MEDIA_DIR = path.join(STATIC_DIR, 'media');
 const CACHE_DIR = path.join(ROOT_DIR, '.cache');
