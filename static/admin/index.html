@@ -109,6 +109,24 @@
         });
 
         CMS.registerPreviewTemplate("clips", ClipsPreview);
+
+        // Add Back to Site button
+        var backButton = document.createElement("a");
+        backButton.href = "/";
+        backButton.innerHTML = "← Back to Site";
+        backButton.style.position = "fixed";
+        backButton.style.top = "10px";
+        backButton.style.right = "10px"; // Changed to right to avoid collision with sidebar
+        backButton.style.zIndex = "1000";
+        backButton.style.padding = "8px 12px";
+        backButton.style.backgroundColor = "#2c3e50";
+        backButton.style.color = "white";
+        backButton.style.textDecoration = "none";
+        backButton.style.borderRadius = "4px";
+        backButton.style.fontFamily = "system-ui, sans-serif";
+        backButton.style.fontWeight = "bold";
+        backButton.style.boxShadow = "0 2px 5px rgba(0,0,0,0.2)";
+        document.body.appendChild(backButton);
     </script>
 </body>
 

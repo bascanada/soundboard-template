@@ -30,3 +30,4 @@ vite.config.ts.timestamp-*
 /static/db.json
 /static/media/
 /static/manifest.json
+src/lib/build.json

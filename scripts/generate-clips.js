@@ -132,6 +132,13 @@ async function main() {
 
         fs.writeFileSync(path.join(STATIC_DIR, 'manifest.json'), JSON.stringify(manifest, null, 2));
 
+        // 9. Generate Build Metadata
+        console.log('🕒 Generating build metadata...');
+        const buildMetadata = {
+            timestamp: new Date().toISOString()
+        };
+        fs.writeFileSync(path.join(ROOT_DIR, 'src/lib/build.json'), JSON.stringify(buildMetadata, null, 2));
+
         console.log('\n✨ Generation Complete!');
         console.log(`   ✅ Processed: ${successCount}`);
         console.log(`   ⏭️  Skipped: ${skippedCount}`);

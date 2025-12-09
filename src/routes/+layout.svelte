@@ -15,11 +15,20 @@
 		themes[themePath]();
 	}
 
+	// Import build metadata
+	import buildMetadata from '$lib/build.json';
+
 	let { children } = $props();
 
 	function toggleSettings() {
 		settingsState.isOpen = !settingsState.isOpen;
 	}
+
+	// Format date nicely
+	const buildDate = new Date(buildMetadata.timestamp).toLocaleString(undefined, {
+		dateStyle: 'medium',
+		timeStyle: 'short'
+	});
 </script>
 
 <svelte:head>
@@ -95,4 +104,8 @@
 	<div class="relative z-10 flex-1">
 		{@render children?.()}
 	</div>
+
+	<footer class="relative z-10 p-4 text-center text-xs opacity-50">
+		Last updated: {buildDate}
+	</footer>
 </div>
