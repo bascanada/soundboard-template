@@ -40,7 +40,7 @@ export function downloadVideo(url, cacheDir) {
     try {
         // Download best video+audio, merge into mp4 or webm
         // --no-playlist to ensure we only get one video if it's a playlist URL
-        execSync(`yt-dlp ${cookieArg} --rm-cache-dir --extractor-args "youtube:player_client=mweb" -f "bestvideo+bestaudio/best" --merge-output-format mp4 --no-playlist -o "${outputTemplate}" "${url}"`, { stdio: 'inherit' });
+        execSync(`yt-dlp ${cookieArg} --rm-cache-dir --extractor-args "youtube:player_client=tv" -f "bestvideo+bestaudio/best" --merge-output-format mp4 --no-playlist -o "${outputTemplate}" "${url}"`, { stdio: 'inherit' });
 
         // Find the downloaded file
         const newFiles = fs.readdirSync(cacheDir);
@@ -56,7 +56,7 @@ export function downloadVideo(url, cacheDir) {
         console.error(`❌ Failed to download ${url}`);
         try {
             console.log('🔍 Listing available formats for debugging:');
-            execSync(`yt-dlp ${cookieArg} --extractor-args "youtube:player_client=mweb" -F "${url}"`, { stdio: 'inherit' });
+            execSync(`yt-dlp ${cookieArg} --extractor-args "youtube:player_client=tv" -F "${url}"`, { stdio: 'inherit' });
         } catch (e) {
             console.log('Could not list formats.');
         }
