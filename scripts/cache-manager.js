@@ -37,6 +37,7 @@ export class CacheManager {
             start: clip.start,
             end: clip.end,
             video: clip.video || false,
+            scale: clip.scale
             // We don't include title/category in the hash because changing them
             // doesn't require re-processing the media files.
         });
