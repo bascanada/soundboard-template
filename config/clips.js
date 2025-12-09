@@ -26,7 +26,8 @@ export default {
                 { title: "Kevin continue", category: "Jambon", start: "4:04.8", end: "4:06.8", video: true, scale: 1.25 },
 
 
-                { title: "Bitch assis", category: "New Generation", start: "11:53.5", end: "11:54.5", video: true, scale: 1.25 },
+                { title: "Bitch assis", category: "New Generation", start: "11:53.5", end: "11:54.3", video: true, scale: 1.25 },
+                { title: "Bitch assis 2", category: "New Generation", start: "11:53.5", end: "11:54.3", video: true, scale: 1.25 },
 
 
             ]
