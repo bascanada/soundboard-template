@@ -1,2 +1,2 @@
-import siteConfig from '$config/site.js';
+import siteConfig from '$config/site.json';
 export default siteConfig;

@@ -12,6 +12,23 @@ collections:
   - name: "config"
     label: "Configuration"
     files:
+      - name: "site"
+        label: "Site Settings"
+        file: "config/site.json"
+        fields:
+          - {label: "Site Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "string"}
+          - {label: "Author", name: "author", widget: "string"}
+          - {label: "Favicon", name: "favicon", widget: "image"}
+          - {label: "Keywords", name: "keywords", widget: "list"}
+          - name: "pwa"
+            label: "PWA Settings"
+            widget: "object"
+            fields:
+              - {label: "App Name", name: "name", widget: "string"}
+              - {label: "Short Name", name: "short_name", widget: "string"}
+              - {label: "Theme Color", name: "theme_color", widget: "color"}
+              - {label: "Background Color", name: "background_color", widget: "color"}
       - name: "clips"
         label: "Clips Database"
         file: "config/clips.json"

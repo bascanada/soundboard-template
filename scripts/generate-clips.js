@@ -106,8 +106,8 @@ async function main() {
         // We need to import siteConfig. Since it's an ES module in src, we can import it directly if we use the right path.
         // However, src/lib/site.config.js might import types which node doesn't like if not compiled.
         // But our site.config.js is pure JS.
-        const siteConfigPath = path.join(ROOT_DIR, 'config/site.js');
-        const siteConfig = (await import(siteConfigPath)).default;
+        const siteConfigPath = path.join(ROOT_DIR, 'config/site.json');
+        const siteConfig = JSON.parse(fs.readFileSync(siteConfigPath, 'utf8'));
 
         const manifest = {
             name: siteConfig.pwa.name,
