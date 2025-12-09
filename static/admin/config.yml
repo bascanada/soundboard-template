@@ -2,6 +2,8 @@ backend:
   name: github
   repo: bascanada/soundboard-template # User's repo
   branch: main
+  base_url: https://kessequidit.bascanada.org # or your deployed domain
+  auth_endpoint: /admin/oauth/auth
 
 media_folder: "static/media"
 public_folder: "/media"
