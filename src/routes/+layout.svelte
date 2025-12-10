@@ -2,6 +2,9 @@
 	import '../app.css';
 	import siteConfig from '$lib/site.config';
 	import { settingsState, saveSettings } from '$lib/state/settings.svelte.js';
+	import { onMount } from 'svelte';
+	import { consentState } from '$lib/state/consent.svelte.js';
+	import ConsentBanner from '$lib/components/ConsentBanner.svelte';
 	import { browser } from '$app/environment';
 
 	$effect(() => {
@@ -11,6 +14,10 @@
 			document.documentElement.classList.remove('dark');
 		}
 		saveSettings();
+	});
+
+	onMount(() => {
+		consentState.init();
 	});
 
 	// Dynamic theme import
@@ -40,3 +47,4 @@
 </svelte:head>
 
 {@render children?.()}
+<ConsentBanner />

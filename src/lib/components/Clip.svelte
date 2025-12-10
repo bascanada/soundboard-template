@@ -4,6 +4,7 @@
 
 	import { audioState } from '$lib/state/audio.svelte.js';
 	import { settingsState } from '$lib/state/settings.svelte.js';
+	import { consentState } from '$lib/state/consent.svelte.js';
 
 	let { clip, currentPlayingId = $bindable(null) } = $props();
 
@@ -48,7 +49,8 @@
 
 		// --- ANALYTICS TRACKING START ---
 		// We check for window.gtag to avoid errors if blocked by adblockers
-		if (typeof window.gtag === 'function') {
+		// AND check for explicit user consent
+		if (consentState.analytics && typeof window.gtag === 'function') {
 			window.gtag('event', 'play_clip', {
 				event_category: 'Audio',
 				event_label: clip.title,

@@ -45,7 +45,7 @@ collections:
                 fields:
                   - {label: "Title", name: "title", widget: "string"}
                   - {label: "Category", name: "category", widget: "string"}
-                  - {label: "Start Time", name: "start", widget: "string", hint: "Format: 00:00"}
-                  - {label: "End Time", name: "end", widget: "string", hint: "Format: 00:00"}
+                  - {label: "Start Time", name: "start", widget: "string", hint: "Format: 00:00 or 00:00.00", pattern: ['^(\d+(\.\d+)?|(\d{1,2}:)?\d{1,2}:\d{2}(\.\d+)?)$', "Invalid format. Use MM:SS, HH:MM:SS, or Seconds (e.g. 1:30, 90)"]}
+                  - {label: "End Time", name: "end", widget: "string", hint: "Format: 00:00 or 00:00.00", pattern: ['^(\d+(\.\d+)?|(\d{1,2}:)?\d{1,2}:\d{2}(\.\d+)?)$', "Invalid format. Use MM:SS, HH:MM:SS, or Seconds (e.g. 1:30, 90)"]}
                   - {label: "Includes Video?", name: "video", widget: "boolean", default: true, required: false}
                   - {label: "Zoom Scale", name: "scale", widget: "number", default: 1.0, value_type: "float", required: false, hint: "1.0 = No Zoom, 1.25 = 125%"}
