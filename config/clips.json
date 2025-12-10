@@ -143,7 +143,7 @@
           "title": "4 Novembre",
           "category": "Politique",
           "start": "1:55.91",
-          "end": "1:57.83"
+          "end": "1:57.75"
         },
         {
           "video": true,
@@ -152,6 +152,30 @@
           "category": "Parodie",
           "start": "2:06.59",
           "end": "2:08.25"
+        },
+        {
+          "video": true,
+          "scale": 1,
+          "title": "Mon anus Ma décision",
+          "category": "Parodie",
+          "start": "3:37.57",
+          "end": "3:39.645"
+        },
+        {
+          "video": true,
+          "scale": 1,
+          "title": "Pense tu a chié",
+          "category": "Jambon",
+          "start": "4:16.36",
+          "end": "4:17.81"
+        },
+        {
+          "video": true,
+          "scale": 1,
+          "title": "Un peu oui",
+          "category": "Jambon",
+          "start": "4:17.85|",
+          "end": "4:18.6"
         }
       ]
     }
