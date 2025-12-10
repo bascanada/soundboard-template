@@ -24,7 +24,9 @@ jobs:
       - name: Cache generated media
         uses: actions/cache@v4
         with:
-          path: .cache
+          path: |
+            .cache
+            static/media
           key: ${{ runner.os }}-media-cache-${{ hashFiles('config/clips.js') }}
           restore-keys: |
             ${{ runner.os }}-media-cache-

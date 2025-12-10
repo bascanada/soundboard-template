@@ -56,8 +56,12 @@ async function main() {
                 // Process Clips for this source
                 for (const clip of source.clips) {
 
-                    // Check if clip needs processing
-                    if (!cacheManager.shouldProcess(clip)) {
+                    // Check if clip needs processing (Check cache AND file existence)
+                    const clipDir = path.join(MEDIA_DIR, clip.id);
+                    const isCached = !cacheManager.shouldProcess(clip);
+                    const filesExist = fs.existsSync(clipDir) && fs.existsSync(path.join(clipDir, 'audio.mp3'));
+
+                    if (isCached && filesExist) {
                         console.log(`  ⏭️  Skipping unchanged clip: ${clip.title} (${clip.id})`);
 
                         // Add to processed list (reconstruct paths)

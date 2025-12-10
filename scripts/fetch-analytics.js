@@ -19,9 +19,19 @@ export async function getClipStats() {
 
         console.log('📊 Fetching analytics data from Google...');
 
+        // Sanitize Property ID (The API wants numeric '123456', not 'G-123456')
+        let propertyId = process.env.GA_PROPERTY_ID;
+        if (propertyId.startsWith('G-')) {
+            console.warn(`⚠️  Warning: GA_PROPERTY_ID ('${propertyId}') looks like a Measurement ID. The Data API expects a numeric Property ID.`);
+            console.warn(`   Attempts to run report might fail. Please find the numeric Property ID in GA4 Admin > Property Settings.`);
+        }
+        if (!propertyId.startsWith('properties/')) {
+            propertyId = `properties/${propertyId}`;
+        }
+
         // Run report: Get eventCount for 'play_clip', grouped by 'clip_id'
         const [response] = await analyticsDataClient.runReport({
-            property: `properties/${process.env.GA_PROPERTY_ID}`,
+            property: propertyId,
             dateRanges: [
                 {
                     startDate: '30daysAgo', // Analyze last 30 days
@@ -54,7 +64,12 @@ export async function getClipStats() {
         return stats;
 
     } catch (error) {
-        console.error('❌ Error fetching analytics:', error.message);
+        if (error.message.includes('INVALID_ARGUMENT')) {
+            console.warn('⚠️  Analytics Error: User custom dimension "clip_id" not found or invalid.');
+            console.warn('   Has it been created in GA4 (Admin > Custom Definitions)? It may take 24-48h to appear.');
+        } else {
+            console.error('❌ Error fetching analytics:', error.message);
+        }
         return {}; // Return empty on failure to not break the build
     }
 }
