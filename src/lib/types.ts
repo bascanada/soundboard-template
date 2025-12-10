@@ -8,6 +8,7 @@ export interface Clip {
 	start?: string; // Original start time string (e.g. "0:42")
 	end?: string;   // Original end time string
 	scale?: number; // Optional zoom scale (e.g. 1.5)
+	playCount?: number;
 }
 
 export interface Database {
@@ -17,6 +18,7 @@ export interface Database {
 
 export interface SiteConfig {
 	title: string;
+	gaMeasurementId?: string;
 	description: string;
 	keywords: string[];
 	favicon: string;

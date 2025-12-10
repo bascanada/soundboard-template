@@ -39,6 +39,8 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
+		"@google-analytics/data": "^5.2.1",
+		"dotenv": "^17.2.3",
 		"wavesurfer.js": "^7.12.1"
 	}
 }

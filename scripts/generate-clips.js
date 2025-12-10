@@ -7,6 +7,7 @@ import { downloadVideo } from './video-downloader.js';
 import { processClip } from './media-processor.js';
 import { generateDatabase } from './database-generator.js';
 import { CacheManager } from './cache-manager.js';
+import { getClipStats } from './fetch-analytics.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
@@ -34,6 +35,11 @@ async function main() {
 
     // 4. Initialize Cache Manager
     const cacheManager = new CacheManager(CACHE_DIR);
+
+    // --- NEW: FETCH STATS ---
+    // Fetch analytics data before processing
+    const clipStats = await getClipStats();
+    // ------------------------
 
     const processedClips = [];
     let successCount = 0;
@@ -70,6 +76,10 @@ async function main() {
 
                     const result = processClip(clip, videoPath, MEDIA_DIR);
                     if (result) {
+                        // --- NEW: INJECT PLAY COUNT ---
+                        result.playCount = clipStats[clip.id] || 0;
+                        // ------------------------------
+
                         processedClips.push(result);
                         cacheManager.markProcessed(clip); // Update cache
                         successCount++;
@@ -97,6 +107,14 @@ async function main() {
                 cacheManager.removeClip(id);
             }
         }
+
+        // --- NEW: ANTIGRAVITY SORTING ---
+        console.log('🧲 Applying Antigravity sorting...');
+        processedClips.sort((a, b) => {
+            // Sort by playCount descending (highest first)
+            return (b.playCount || 0) - (a.playCount || 0);
+        });
+        // --------------------------------
 
         // 7. Generate Database
         generateDatabase(processedClips, STATIC_DIR);

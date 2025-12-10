@@ -46,6 +46,18 @@
 		// Stop others
 		currentPlayingId = clip.id;
 
+		// --- ANALYTICS TRACKING START ---
+		// We check for window.gtag to avoid errors if blocked by adblockers
+		if (typeof window.gtag === 'function') {
+			window.gtag('event', 'play_clip', {
+				event_category: 'Audio',
+				event_label: clip.title,
+				clip_id: clip.id, // This ID links back to your config
+				clip_category: clip.category
+			});
+		}
+		// --- ANALYTICS TRACKING END ---
+
 		try {
 			if (clip.videoSrc && video) {
 				video.volume = settingsState.volume;

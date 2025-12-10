@@ -2,6 +2,7 @@
 	import '../app.css';
 	import siteConfig from '$lib/site.config';
 	import { settingsState, saveSettings } from '$lib/state/settings.svelte.js';
+	import { browser } from '$app/environment';
 
 	$effect(() => {
 		if (settingsState.darkMode) {

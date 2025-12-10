@@ -3,6 +3,8 @@ name: Deploy to Cloudflare Pages
 on:
   push:
     branches: [ "main" ]
+  schedule:
+    - cron: '0 8 * * *' # Runs every day at 8:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -47,6 +49,9 @@ jobs:
 
       - name: Generate Media
         run: npm run generate
+        env:
+          GA_PROPERTY_ID: ${{ secrets.GA_PROPERTY_ID }}
+          GOOGLE_APPLICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}
 
       - name: Cleanup Cookies # Optional but good practice
         if: always()
