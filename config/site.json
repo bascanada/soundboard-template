@@ -6,8 +6,8 @@
         "clips",
         "funny"
     ],
-    "favicon": "/favicon.png",
-    "theme": "crimson",
+    "favicon": "/media/favicon.png",
+    "theme": "wintry",
     "author": "Bascanada",
     "pwa": {
         "name": "Kesse Qui Dit ?",
@@ -15,6 +15,6 @@
         "start_url": "/",
         "display": "standalone",
         "background_color": "#ffffff",
-        "theme_color": "#ffffff"
+        "theme_color": "#ebe7e7"
     }
 }
