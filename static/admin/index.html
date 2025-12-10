@@ -4,100 +4,34 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Soundboard Admin</title>
+    <title>KQD Admin</title>
+</head>
 
 <body>
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
     <script>
+        // Custom Preview Component
         var ClipsPreview = createClass({
             render: function () {
                 var entry = this.props.entry;
                 var sources = entry.getIn(['data', 'sources']);
-
-                // Helper to convert immutable structure to JS if needed, though standard map access works
                 if (!sources) return h('div', {}, 'No sources defined');
-
-                return h('div', {
-                    style: {
-                        padding: '20px',
-                        fontFamily: 'sans-serif'
-                    }
-                },
-                    h('h1', {
-                        style: {
-                            borderBottom: '2px solid #ddd',
-                            paddingBottom: '10px'
-                        }
-                    }, 'Clips Configuration'),
+                return h('div', { style: { padding: '20px', fontFamily: 'sans-serif' } },
+                    h('h1', { style: { borderBottom: '2px solid #ddd', paddingBottom: '10px' } }, 'Clips Configuration'),
                     sources.map(function (source, index) {
                         var clips = source.get('clips');
-                        return h('div', {
-                            key: index,
-                            style: {
-                                marginBottom: '30px',
-                                background: '#f9f9f9',
-                                padding: '15px',
-                                borderRadius: '8px'
-                            }
-                        },
-                            h('h3', {
-                                style: {
-                                    color: '#2c3e50',
-                                    margin: '0 0 10px'
-                                }
-                            }, 'Source: ' + (source.get('videoUrl') || 'No URL')),
-                            h('div', {
-                                style: {
-                                    display: 'grid',
-                                    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-                                    gap: '15px'
-                                }
-                            },
+                        return h('div', { key: index, style: { marginBottom: '30px', background: '#f9f9f9', padding: '15px', borderRadius: '8px' } },
+                            h('h3', { style: { color: '#2c3e50', margin: '0 0 10px' } }, 'Source: ' + (source.get('videoUrl') || 'No URL')),
+                            h('div', { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '15px' } },
                                 clips ? clips.map(function (clip, cIndex) {
-                                    return h('div', {
-                                        key: cIndex,
-                                        style: {
-                                            background: 'white',
-                                            padding: '10px',
-                                            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                                            borderRadius: '4px'
-                                        }
-                                    },
-                                        h('div', {
-                                            style: {
-                                                fontWeight: 'bold',
-                                                fontSize: '1.1em'
-                                            }
-                                        }, clip.get('title') || 'Untitled'),
-                                        h('div', {
-                                            style: {
-                                                margin: '5px 0'
-                                            }
-                                        },
-                                            h('span', {
-                                                style: {
-                                                    background: '#ebf8ff',
-                                                    color: '#2b6cb0',
-                                                    padding: '2px 6px',
-                                                    borderRadius: '4px',
-                                                    fontSize: '0.8em',
-                                                    textTransform: 'uppercase'
-                                                }
-                                            }, clip.get('category') || 'No Category')
+                                    return h('div', { key: cIndex, style: { background: 'white', padding: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)', borderRadius: '4px' } },
+                                        h('div', { style: { fontWeight: 'bold', fontSize: '1.1em' } }, clip.get('title') || 'Untitled'),
+                                        h('div', { style: { margin: '5px 0' } },
+                                            h('span', { style: { background: '#ebf8ff', color: '#2b6cb0', padding: '2px 6px', borderRadius: '4px', fontSize: '0.8em', textTransform: 'uppercase' } }, clip.get('category') || 'No Category')
                                         ),
-                                        h('div', {
-                                            style: {
-                                                fontSize: '0.9em',
-                                                color: '#666'
-                                            }
-                                        },
+                                        h('div', { style: { fontSize: '0.9em', color: '#666' } },
                                             h('span', {}, '⏱ ' + clip.get('start') + ' - ' + clip.get('end')),
-                                            clip.get('scale') ? h('span', {
-                                                style: {
-                                                    marginLeft: '10px',
-                                                    color: '#e53e3e'
-                                                }
-                                            }, '🔍 ' + clip.get('scale') + 'x') : null
+                                            clip.get('scale') ? h('span', { style: { marginLeft: '10px', color: '#e53e3e' } }, '🔍 ' + clip.get('scale') + 'x') : null
                                         )
                                     );
                                 }) : h('div', {}, 'No clips in this source')
@@ -107,26 +41,221 @@
                 );
             }
         });
-
         CMS.registerPreviewTemplate("clips", ClipsPreview);
 
-        // Add Back to Site button
+        // --- Custom UI Overlays ---
+
+        // Back to Site Button
         var backButton = document.createElement("a");
         backButton.href = "/";
         backButton.innerHTML = "← Back to Site";
-        backButton.style.position = "fixed";
-        backButton.style.top = "10px";
-        backButton.style.right = "10px"; // Changed to right to avoid collision with sidebar
-        backButton.style.zIndex = "1000";
-        backButton.style.padding = "8px 12px";
-        backButton.style.backgroundColor = "#2c3e50";
-        backButton.style.color = "white";
-        backButton.style.textDecoration = "none";
-        backButton.style.borderRadius = "4px";
-        backButton.style.fontFamily = "system-ui, sans-serif";
-        backButton.style.fontWeight = "bold";
-        backButton.style.boxShadow = "0 2px 5px rgba(0,0,0,0.2)";
+        Object.assign(backButton.style, {
+            position: "fixed", bottom: "20px", right: "20px", zIndex: "1000",
+            padding: "8px 12px", backgroundColor: "#2c3e50", color: "white",
+            textDecoration: "none", borderRadius: "4px", fontFamily: "system-ui, sans-serif",
+            fontWeight: "bold", boxShadow: "0 2px 5px rgba(0,0,0,0.2)"
+        });
         document.body.appendChild(backButton);
+
+        // Clip Editor Button
+        var editorButton = document.createElement("a");
+        editorButton.href = "#";
+        editorButton.innerHTML = "✂️ Clip Editor";
+        Object.assign(editorButton.style, {
+            position: "fixed", bottom: "20px", right: "150px", zIndex: "1000",
+            padding: "8px 12px", backgroundColor: "#4f46e5", color: "white",
+            textDecoration: "none", borderRadius: "4px", fontFamily: "system-ui, sans-serif",
+            fontWeight: "bold", boxShadow: "0 2px 5px rgba(0,0,0,0.2)",
+            display: "flex", alignItems: "center", gap: "6px", cursor: "pointer"
+        });
+        editorButton.onmouseover = function () { this.style.backgroundColor = "#4338ca"; };
+        editorButton.onmouseout = function () { this.style.backgroundColor = "#4f46e5"; };
+        document.body.appendChild(editorButton);
+
+        // Editor Modal
+        var modal = document.createElement("div");
+        Object.assign(modal.style, {
+            display: "none", position: "fixed", top: "50%", left: "50%",
+            transform: "translate(-50%, -50%)", width: "95%", height: "90%",
+            backgroundColor: "white", zIndex: "2000", boxShadow: "0 0 50px rgba(0,0,0,0.5)",
+            borderRadius: "8px", overflow: "hidden", border: "1px solid #ccc"
+        });
+        document.body.appendChild(modal);
+
+        // Modal Header
+        var modalHeader = document.createElement("div");
+        Object.assign(modalHeader.style, {
+            padding: "10px", backgroundColor: "#f3f4f6", display: "flex",
+            justifyContent: "flex-end", borderBottom: "1px solid #e5e7eb"
+        });
+
+        var closeButton = document.createElement("button");
+        closeButton.innerHTML = "✖ Close";
+        Object.assign(closeButton.style, {
+            padding: "5px 10px", cursor: "pointer", border: "none",
+            backgroundColor: "#ef4444", color: "white", borderRadius: "4px"
+        });
+        closeButton.onclick = function () {
+            modal.style.display = "none";
+            document.body.style.overflow = "";
+        };
+        modalHeader.appendChild(closeButton);
+        modal.appendChild(modalHeader);
+
+        // Iframe
+        var iframe = document.createElement("iframe");
+        iframe.src = "/editor";
+        Object.assign(iframe.style, {
+            width: "100%", height: "calc(100% - 50px)", border: "none"
+        });
+        modal.appendChild(iframe);
+
+        // Toggle Logic
+        editorButton.onclick = function (e) {
+            e.preventDefault();
+            modal.style.display = "block";
+            document.body.style.overflow = "hidden";
+        };
+
+        // --- Bulk Copy/Paste Logic ---
+        (function () {
+            const observer = new MutationObserver(() => {
+                const labels = Array.from(document.querySelectorAll('label'));
+                const startLabels = labels.filter(l => l.innerText.trim().includes('Start Time'));
+
+                startLabels.forEach(label => {
+                    if (label.dataset.hasBulkButtons) return;
+
+                    const inputId = label.getAttribute('for');
+                    if (!inputId) return;
+
+                    const startInput = document.getElementById(inputId);
+                    if (!startInput) return;
+
+                    // Buttons
+                    const btnContainer = document.createElement('div');
+                    Object.assign(btnContainer.style, {
+                        display: "inline-flex", gap: "8px", marginLeft: "10px", verticalAlign: "middle"
+                    });
+
+                    btnContainer.innerHTML = `
+                        <button type="button" class="cms-paste-btn" style="background:#e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; border: 1px solid #ccc; white-space:nowrap;" title="Paste Start & End from Editor">Paste Pair</button>
+                        <button type="button" class="cms-copy-btn" style="background:#e5e7eb; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; cursor: pointer; border: 1px solid #ccc; white-space:nowrap;" title="Copy to Editor">Copy Pair</button>
+                    `;
+
+                    label.appendChild(btnContainer);
+                    label.dataset.hasBulkButtons = 'true';
+
+                    // --- Improved End Input Detection ---
+                    const getEndInput = () => {
+                        console.log('Start Input ID:', startInput.id);
+
+                        // Strategy 1: ID Replacement
+                        if (startInput.id && startInput.id.includes('start')) {
+                            const endId = startInput.id.replace('start', 'end');
+                            const endInput = document.getElementById(endId);
+                            if (endInput) return endInput;
+                        }
+
+                        // Strategy 2: Label Traversal
+                        let parent = label.parentElement;
+                        for (let i = 0; i < 5; i++) {
+                            if (!parent) break;
+                            const allLabels = Array.from(parent.querySelectorAll('label'));
+                            const endLabel = allLabels.find(l => l.innerText.trim().includes('End Time'));
+                            if (endLabel) {
+                                const endId = endLabel.getAttribute('for');
+                                return document.getElementById(endId);
+                            }
+                            parent = parent.parentElement;
+                        }
+
+                        // Strategy 3: Next Input in DOM
+                        // Since 'end' follows 'start' in config, it should be the next input element
+                        const allInputs = Array.from(document.querySelectorAll('input'));
+                        const startIndex = allInputs.indexOf(startInput);
+                        if (startIndex !== -1 && startIndex < allInputs.length - 1) {
+                            // Look ahead a few inputs (e.g. next 3) to find one with 'end' in ID
+                            // or just the very next one if we are desperate
+                            for (let j = 1; j <= 3; j++) {
+                                const next = allInputs[startIndex + j];
+                                if (next && next.id && next.id.toLowerCase().includes('end')) {
+                                    return next;
+                                }
+                            }
+                        }
+
+                        return null;
+                    };
+
+                    const pasteBtn = btnContainer.querySelector('.cms-paste-btn');
+                    const copyBtn = btnContainer.querySelector('.cms-copy-btn');
+
+                    pasteBtn.onclick = async (e) => {
+                        e.preventDefault();
+
+                        let text = '';
+                        try {
+                            text = await navigator.clipboard.readText();
+                        } catch (err) {
+                            text = prompt("Please paste the Start|End pair here (Ctrl+V):");
+                        }
+
+                        if (!text || !text.includes('|')) {
+                            if (text !== null) alert('Clipboard data invalid. Expected: START|END');
+                            return;
+                        }
+
+                        const [startVal, endVal] = text.split('|');
+                        setNativeValue(startInput, startVal);
+
+                        const endInput = getEndInput();
+                        if (endInput) {
+                            setNativeValue(endInput, endVal);
+                        } else {
+                            console.warn("Paste: End Input not found");
+                            alert('Could not find "End Time" field automatically.');
+                        }
+                    };
+
+                    copyBtn.onclick = (e) => {
+                        e.preventDefault();
+                        const endInput = getEndInput();
+
+                        if (!endInput) console.warn("Copy: End Input not found via ID or Label");
+
+                        const endVal = endInput ? endInput.value : '';
+                        const startVal = startInput.value;
+
+                        const text = `${startVal}|${endVal}`;
+                        navigator.clipboard.writeText(text).then(() => {
+                            const originalText = copyBtn.textContent;
+                            copyBtn.textContent = 'Copied!';
+                            setTimeout(() => copyBtn.textContent = 'Copy Pair', 1000);
+                        });
+                    };
+
+                    btnContainer.onclick = (e) => e.preventDefault();
+                });
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
+
+            function setNativeValue(element, value) {
+                const valueSetter = Object.getOwnPropertyDescriptor(element, 'value').set;
+                const prototype = Object.getPrototypeOf(element);
+                const prototypeValueSetter = Object.getOwnPropertyDescriptor(prototype, 'value').set;
+
+                if (valueSetter && valueSetter !== prototypeValueSetter) {
+                    prototypeValueSetter.call(element, value);
+                } else {
+                    valueSetter.call(element, value);
+                }
+
+                element.dispatchEvent(new Event('input', { bubbles: true }));
+                element.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        })();
     </script>
 </body>
 
