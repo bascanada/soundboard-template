@@ -136,6 +136,22 @@
           "category": "Jambon",
           "start": "4:49",
           "end": "4:52"
+        },
+        {
+          "video": true,
+          "scale": 1,
+          "title": "4 Novembre",
+          "category": "Politique",
+          "start": "1:55.91",
+          "end": "1:57.83"
+        },
+        {
+          "video": true,
+          "scale": 1,
+          "title": "Jean-Guy",
+          "category": "Parodie",
+          "start": "2:06.59",
+          "end": "2:08.25"
         }
       ]
     }
