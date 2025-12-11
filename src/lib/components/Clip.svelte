@@ -181,7 +181,7 @@
 			cy={size / 2}
 			r={radius}
 			fill="none"
-			stroke="rgba(128,128,128, 0.2)"
+			stroke="rgb(var(--color-surface-500) / 0.3)"
 			stroke-width={strokeWidth}
 		/>
 
@@ -191,7 +191,9 @@
 			cy={size / 2}
 			r={radius}
 			fill="none"
-			stroke={isViewed && !isPlaying ? '#888' : `url(#gradient-${clip.id})`}
+			stroke={isViewed && !isPlaying
+				? 'rgb(var(--color-surface-400))'
+				: `url(#gradient-${clip.id})`}
 			stroke-width={strokeWidth}
 			stroke-dasharray={circumference}
 			stroke-dashoffset={strokeDashoffset}

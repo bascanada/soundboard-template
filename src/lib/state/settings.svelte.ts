@@ -1,8 +1,11 @@
+import siteConfig from '$lib/site.config';
+
 const defaults = {
     volume: 1.0,
     podSize: 1.0, // Scale factor: 0.5 to 2.0
     isOpen: false,
-    darkMode: true
+    darkMode: true,
+    theme: siteConfig.theme
 };
 
 function loadSettings() {

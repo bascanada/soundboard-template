@@ -7,6 +7,24 @@
 	<h2 class="h2">Paramètres</h2>
 
 	<!-- Theme Control -->
+	<div class="space-y-2">
+		<label for="theme" class="flex justify-between font-bold">
+			<span>Thème</span>
+			<span class="capitalize">{settingsState.theme}</span>
+		</label>
+		<select
+			id="theme"
+			bind:value={settingsState.theme}
+			onchange={saveSettings}
+			class="w-full rounded-lg bg-surface-200 p-2 text-black dark:bg-surface-700 dark:text-white"
+		>
+			{#each ['catppuccin', 'cerberus', 'concord', 'crimson', 'fennec', 'hamlindigo', 'legacy', 'mint', 'modern', 'mona', 'nosh', 'nouveau', 'pine', 'reign', 'rocket', 'rose', 'sahara', 'seafoam', 'terminus', 'vintage', 'vox', 'wintry'] as theme}
+				<option value={theme}>{theme}</option>
+			{/each}
+		</select>
+	</div>
+
+	<!-- Dark Mode Control -->
 	<div class="flex items-center justify-between">
 		<span class="font-bold">Mode Sombre</span>
 		<Switch

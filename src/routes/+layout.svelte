@@ -22,11 +22,14 @@
 
 	// Dynamic theme import
 	const themes = import.meta.glob('/node_modules/@skeletonlabs/skeleton/dist/themes/*.css');
-	const themePath = `/node_modules/@skeletonlabs/skeleton/dist/themes/${siteConfig.theme}.css`;
 
-	if (themes[themePath]) {
-		themes[themePath]();
-	}
+	$effect(() => {
+		const themePath = `/node_modules/@skeletonlabs/skeleton/dist/themes/${settingsState.theme}.css`;
+		if (themes[themePath]) {
+			themes[themePath]();
+		}
+		document.documentElement.setAttribute('data-theme', settingsState.theme);
+	});
 
 	let { children } = $props();
 </script>
