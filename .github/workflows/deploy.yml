@@ -59,6 +59,13 @@ jobs:
         if: always()
         run: rm -f cookies.txt
 
+      - name: Upload Media Artifact (Debug)
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-media
+          path: .cache/downloads
+          retention-days: 1
+
       - name: Build
         run: npm run build
 

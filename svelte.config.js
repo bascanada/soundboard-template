@@ -17,7 +17,9 @@ const config = {
 			base: process.argv.includes('dev') ? '' : process.env.BASE_PATH
 		},
 		alias: {
-			$config: path.resolve('config')
+			$config: process.env.CONFIG_DIR
+				? path.resolve(process.env.CONFIG_DIR)
+				: path.resolve('config')
 		}
 	}
 };

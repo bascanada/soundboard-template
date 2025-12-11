@@ -9,11 +9,15 @@ export default defineConfig({
 		tailwindcss(),
 		sveltekit(),
 		{
-			name: 'soundboard-watcher',
 			configureServer(server) {
-				server.watcher.add(path.resolve('config/clips.js'));
+				const configDir = process.env.CONFIG_DIR
+					? path.resolve(process.env.CONFIG_DIR)
+					: path.resolve('config');
+				const configFile = path.join(configDir, 'clips.json');
+
+				server.watcher.add(configFile);
 				server.watcher.on('change', (file) => {
-					if (file.endsWith('config/clips.js')) {
+					if (file === configFile) {
 						console.log('🔄 Configuration changed, regenerating clips...');
 						exec('npm run generate', (error, stdout, stderr) => {
 							if (error) {
@@ -31,7 +35,10 @@ export default defineConfig({
 	],
 	server: {
 		fs: {
-			allow: ['config']
+			allow: [
+				'config', // Keeping this for default cases
+				process.env.CONFIG_DIR ? path.resolve(process.env.CONFIG_DIR) : 'config'
+			]
 		}
 	}
 });

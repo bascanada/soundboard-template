@@ -11,7 +11,10 @@ import { getClipStats } from './fetch-analytics.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT_DIR = path.resolve(__dirname, '..');
-const CONFIG_PATH = path.join(ROOT_DIR, 'config/clips.json');
+const CONFIG_DIR = process.env.CONFIG_DIR
+    ? path.resolve(process.env.CONFIG_DIR)
+    : path.join(ROOT_DIR, 'config');
+const CONFIG_PATH = path.join(CONFIG_DIR, 'clips.json');
 const STATIC_DIR = path.join(ROOT_DIR, 'static');
 const MEDIA_DIR = path.join(STATIC_DIR, 'media');
 const CACHE_DIR = path.join(ROOT_DIR, '.cache');
@@ -128,7 +131,7 @@ async function main() {
         // We need to import siteConfig. Since it's an ES module in src, we can import it directly if we use the right path.
         // However, src/lib/site.config.js might import types which node doesn't like if not compiled.
         // But our site.config.js is pure JS.
-        const siteConfigPath = path.join(ROOT_DIR, 'config/site.json');
+        const siteConfigPath = path.join(CONFIG_DIR, 'site.json');
         const siteConfig = JSON.parse(fs.readFileSync(siteConfigPath, 'utf8'));
 
         const manifest = {
