@@ -3,7 +3,7 @@
 	import { fade, fly } from 'svelte/transition';
 </script>
 
-{#if !consentState.hasDecided}
+{#if consentState.initialized && !consentState.hasDecided}
 	<div
 		class="fixed right-0 bottom-0 left-0 z-50 p-4"
 		in:fly={{ y: 50, duration: 500, delay: 1000 }}

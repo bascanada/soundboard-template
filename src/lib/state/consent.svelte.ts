@@ -3,6 +3,7 @@ import siteConfig from '$lib/site.config';
 export const consentState = $state({
     hasDecided: false, // Has the user clicked anything yet?
     analytics: false,  // Did they say yes?
+    initialized: false, // Have we checked local storage?
 
     // Initialize from LocalStorage on mount
     init() {
@@ -20,6 +21,7 @@ export const consentState = $state({
                     console.error('Error parsing consent state', e);
                 }
             }
+            this.initialized = true;
         }
     },
 
