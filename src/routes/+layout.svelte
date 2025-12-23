@@ -6,6 +6,7 @@
 	import { consentState } from '$lib/state/consent.svelte.js';
 	import ConsentBanner from '$lib/components/ConsentBanner.svelte';
 	import { browser } from '$app/environment';
+	import { afterNavigate } from '$app/navigation';
 
 	$effect(() => {
 		if (settingsState.darkMode) {
@@ -18,6 +19,17 @@
 
 	onMount(() => {
 		consentState.init();
+	});
+
+	// Track page views on SPA navigation
+	afterNavigate(() => {
+		if (consentState.analytics && typeof window.gtag === 'function') {
+			window.gtag('event', 'page_view', {
+				page_title: document.title,
+				page_location: window.location.href,
+				page_path: window.location.pathname
+			});
+		}
 	});
 
 	// Dynamic theme import

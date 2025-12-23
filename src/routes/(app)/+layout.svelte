@@ -70,13 +70,21 @@
 	<header
 		class="sticky top-0 z-40 flex items-center justify-between bg-surface-50/50 p-2 backdrop-blur-md sm:p-4 dark:bg-surface-900/50"
 	>
-		<div class="flex flex-col">
+		<a href="/" class="flex flex-col hover:opacity-80 transition-opacity">
 			<h1 class="h4 font-bold sm:h3">{siteConfig.title} 🔊</h1>
 			<p class="hidden text-xs opacity-70 sm:block">{siteConfig.description}</p>
+		</a>
+		<div class="flex items-center gap-2">
+			<a
+				href="/stats"
+				class="variant-ghost-surface btn btn-sm hover:scale-105 transition-transform"
+			>
+				🏆 <span class="hidden sm:inline">Classement</span>
+			</a>
+			<button class="variant-ghost-surface btn btn-sm hover:rotate-12 hover:scale-110 transition-transform" onclick={toggleSettings}>
+				⚙️ <span class="hidden sm:inline">Paramètres</span>
+			</button>
 		</div>
-		<button class="variant-ghost-surface btn btn-sm hover:rotate-12 hover:scale-110 transition-transform" onclick={toggleSettings}>
-			⚙️ <span class="hidden sm:inline">Paramètres</span>
-		</button>
 	</header>
 
 	<div class="relative z-10 flex-1">

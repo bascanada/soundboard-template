@@ -47,18 +47,15 @@
 		// Stop others
 		currentPlayingId = clip.id;
 
-		// --- ANALYTICS TRACKING START ---
-		// We check for window.gtag to avoid errors if blocked by adblockers
-		// AND check for explicit user consent
+		// Track clip play if user consented to analytics
 		if (consentState.analytics && typeof window.gtag === 'function') {
 			window.gtag('event', 'play_clip', {
 				event_category: 'Audio',
 				event_label: clip.title,
-				clip_id: clip.id, // This ID links back to your config
+				clip_id: clip.id,
 				clip_category: clip.category
 			});
 		}
-		// --- ANALYTICS TRACKING END ---
 
 		try {
 			if (clip.videoSrc && video) {

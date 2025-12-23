@@ -51,25 +51,26 @@ export const consentState = $state({
 
 // Helper to inject the script dynamically
 function loadGoogleAnalytics() {
-    // Only load if ID exists and script isn't already there
     if (!siteConfig.gaMeasurementId || document.getElementById('ga-script')) return;
 
-    // 1. Create the script tag for gtag.js
+    // Initialize the dataLayer BEFORE loading script
+    window.dataLayer = window.dataLayer || [];
+
+    // @ts-ignore
+    function gtag(...args: any[]) { window.dataLayer.push(args); }
+
+    // Make gtag available globally immediately
+    window.gtag = gtag;
+
+    // @ts-ignore
+    gtag('js', new Date());
+    // @ts-ignore
+    gtag('config', siteConfig.gaMeasurementId, { send_page_view: true });
+
+    // Load the script
     const script = document.createElement('script');
     script.id = 'ga-script';
     script.async = true;
     script.src = `https://www.googletagmanager.com/gtag/js?id=${siteConfig.gaMeasurementId}`;
     document.head.appendChild(script);
-
-    // 2. Initialize the dataLayer
-    window.dataLayer = window.dataLayer || [];
-    // @ts-ignore
-    function gtag() { window.dataLayer.push(arguments); }
-    // @ts-ignore
-    gtag('js', new Date());
-    // @ts-ignore
-    gtag('config', siteConfig.gaMeasurementId);
-
-    // Make gtag available globally for manual calls
-    window.gtag = gtag;
 }

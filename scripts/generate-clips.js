@@ -39,10 +39,8 @@ async function main() {
     // 4. Initialize Cache Manager
     const cacheManager = new CacheManager(CACHE_DIR);
 
-    // --- NEW: FETCH STATS ---
-    // Fetch analytics data before processing
-    const clipStats = await getClipStats();
-    // ------------------------
+    // Fetch analytics data (multiple time periods)
+    const { combined: clipStats, labels: statLabels } = await getClipStats();
 
     const processedClips = [];
     let successCount = 0;
@@ -67,6 +65,9 @@ async function main() {
                     if (isCached && filesExist) {
                         console.log(`  ⏭️  Skipping unchanged clip: ${clip.title} (${clip.id})`);
 
+                        // Inject stats for cached clips too
+                        const stats = clipStats[clip.id] || {};
+
                         // Add to processed list (reconstruct paths)
                         processedClips.push({
                             id: clip.id,
@@ -75,7 +76,13 @@ async function main() {
                             audioSrc: `/media/${clip.id}/audio.mp3`,
                             thumbnailSrc: `/media/${clip.id}/thumbnail.jpg`,
                             videoSrc: clip.video ? `/media/${clip.id}/video.webm` : null,
-                            scale: clip.scale
+                            scale: clip.scale,
+                            playCount: stats['30d'] || 0,
+                            stats: {
+                                '7d': stats['7d'] || 0,
+                                '30d': stats['30d'] || 0,
+                                'all': stats['all'] || 0
+                            }
                         });
                         skippedCount++;
                         continue;
@@ -83,9 +90,14 @@ async function main() {
 
                     const result = processClip(clip, videoPath, MEDIA_DIR);
                     if (result) {
-                        // --- NEW: INJECT PLAY COUNT ---
-                        result.playCount = clipStats[clip.id] || 0;
-                        // ------------------------------
+                        // Inject play counts for all time periods
+                        const stats = clipStats[clip.id] || {};
+                        result.playCount = stats['30d'] || 0; // Default sort uses 30d
+                        result.stats = {
+                            '7d': stats['7d'] || 0,
+                            '30d': stats['30d'] || 0,
+                            'all': stats['all'] || 0
+                        };
 
                         processedClips.push(result);
                         cacheManager.markProcessed(clip); // Update cache
