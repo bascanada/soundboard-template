@@ -68,11 +68,14 @@
 
 	<!-- AppBar -->
 	<header
-		class="sticky top-0 z-40 flex items-center justify-between bg-surface-50/50 p-4 backdrop-blur-md dark:bg-surface-900/50"
+		class="sticky top-0 z-40 flex items-center justify-between bg-surface-50/50 p-2 backdrop-blur-md sm:p-4 dark:bg-surface-900/50"
 	>
-		<h1 class="h3 font-bold">{siteConfig.title}</h1>
-		<button class="variant-ghost-surface btn btn-sm" onclick={toggleSettings}>
-			⚙️ Paramètres
+		<div class="flex flex-col">
+			<h1 class="h4 font-bold sm:h3">{siteConfig.title} 🔊</h1>
+			<p class="hidden text-xs opacity-70 sm:block">{siteConfig.description}</p>
+		</div>
+		<button class="variant-ghost-surface btn btn-sm hover:rotate-12 hover:scale-110 transition-transform" onclick={toggleSettings}>
+			⚙️ <span class="hidden sm:inline">Paramètres</span>
 		</button>
 	</header>
 
@@ -80,7 +83,19 @@
 		{@render children?.()}
 	</div>
 
-	<footer class="relative z-10 p-4 text-center text-xs opacity-50">
-		Last updated: {buildDate}
+	<footer class="relative z-10 space-y-1 p-2 text-center text-xs opacity-60 sm:p-4">
+		<p>Last updated: {buildDate}</p>
+		<p>
+			Made with
+			<a
+				href="https://github.com/bascanada/soundboard-template"
+				target="_blank"
+				rel="noopener noreferrer"
+				class="underline decoration-primary-500 decoration-wavy hover:text-primary-500 transition-colors"
+			>
+				soundboard-template
+			</a>
+			 ✨ Fork it & make your own!
+		</p>
 	</footer>
 </div>

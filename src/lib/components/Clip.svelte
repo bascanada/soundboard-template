@@ -125,7 +125,9 @@
 </script>
 
 <div
-	class="relative cursor-pointer overflow-hidden rounded-full transition-transform duration-200 hover:scale-105 active:scale-95"
+	class="group relative cursor-pointer overflow-hidden rounded-full shadow-lg ring-2 ring-transparent transition-all duration-200 hover:scale-110 hover:shadow-xl hover:ring-primary-500/50 active:scale-95"
+	class:animate-pulse={isPlaying}
+	class:ring-primary-500={isPlaying}
 	style:width="{size}px"
 	style:height="{size}px"
 	onclick={togglePlay}
@@ -204,4 +206,11 @@
 
 	<!-- Title Overlay (Optional, maybe below?) -->
 </div>
-<div class="mt-1 w-[100px] truncate text-center text-xs">{clip.title}</div>
+<div
+	class="mt-1 w-[100px] truncate text-center text-xs font-medium transition-all"
+	class:text-primary-500={isPlaying}
+	class:opacity-100={isPlaying}
+	class:opacity-70={!isPlaying}
+>
+	{isPlaying ? '🔊 ' : ''}{clip.title}
+</div>

@@ -1,6 +1,9 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
+/* Enable dark mode via .dark class (instead of media query) */
+@variant dark (&:where(.dark, .dark *));
+
 @import '@skeletonlabs/skeleton';
 @import '@skeletonlabs/skeleton/optional/presets';
 /* Theme imported dynamically in +layout.svelte */
