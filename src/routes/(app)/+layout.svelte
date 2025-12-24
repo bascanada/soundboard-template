@@ -4,6 +4,7 @@
 	import { audioState } from '$lib/state/audio.svelte.js';
 	import { settingsState, saveSettings } from '$lib/state/settings.svelte.js';
 	import Settings from '$lib/components/Settings.svelte';
+	import BoardBar from '$lib/components/BoardBar.svelte';
 
 	// Import build metadata
 	import buildMetadata from '$lib/build.json';
@@ -76,6 +77,12 @@
 		</a>
 		<div class="flex items-center gap-2">
 			<a
+				href="/boards"
+				class="variant-ghost-surface btn btn-sm hover:scale-105 transition-transform"
+			>
+				📋 <span class="hidden sm:inline">Mes boards</span>
+			</a>
+			<a
 				href="/stats"
 				class="variant-ghost-surface btn btn-sm hover:scale-105 transition-transform"
 			>
@@ -90,6 +97,8 @@
 	<div class="relative z-10 flex-1">
 		{@render children?.()}
 	</div>
+
+	<BoardBar />
 
 	<footer class="relative z-10 space-y-1 p-2 text-center text-xs opacity-60 sm:p-4">
 		<p>Last updated: {buildDate}</p>
